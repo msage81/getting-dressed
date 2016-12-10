@@ -34,11 +34,11 @@ class CommandBuilder {
   }
 
   def getDressed(temperature:String, commands:Int *):String ={
-    Validator.init
+    val validator = new Validator(false,false,false,false,false,false,false)
     if(!temperature.equalsIgnoreCase("HOT") && !temperature.equalsIgnoreCase("cold")){
       throw new DressingException
     }
-    val dressingSteps = commands.map(Command(_,temperature))
+    val dressingSteps = commands.map(Command(_,temperature, validator))
     buildReadableDressingSteps(dressingSteps)
   }
 

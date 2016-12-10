@@ -1,23 +1,12 @@
 package com.sage
 
-object Validator{
-  def init(): Unit ={
-    pants = false
-    pjs = false
-    socks = false
-    jacket = false
-    headWear = false
-    footWear = false
-    shirt = false
-  }
-  var pjs:Boolean = false
-  var socks:Boolean= false
-  var shirt:Boolean = false
-  var jacket:Boolean = false
-  var pants:Boolean = false
-  var headWear:Boolean = false
-  var footWear:Boolean = false
-}
+class Validator(var pjs:Boolean,
+  var socks:Boolean,
+  var shirt:Boolean,
+  var jacket:Boolean,
+  var pants:Boolean,
+  var headWear:Boolean,
+  var footWear:Boolean)
 /*
 •	You start in the house with your PJ’s on
 •	Pajamas must be taken off before anything else can be put on

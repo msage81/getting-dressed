@@ -3,19 +3,19 @@ package com.sage.command
 import com.sage.Validator
 
 abstract class Command(val code:Int, val description:String, override val hotResponse:String,
-                       override val coldResponse:String) extends Response{
+                       override val coldResponse:String, validator: Validator) extends Response{
   def isValid(): Boolean ={
 
     code match {
-      case 8 => Validator.pjs = Validator.socks == false && Validator.footWear == false && Validator.headWear == false &&
-        Validator.pants == false && Validator.jacket == false && Validator.shirt == false; Validator.pjs
-      case 7 => Validator.pjs && Validator.footWear && Validator.shirt && Validator.pants
-      case 6 => Validator.pants = (Validator.footWear == false && Validator.pjs); Validator.pants
-      case 5 => Validator.jacket = this.isInstanceOf[Cold] && Validator.shirt && Validator.pjs; Validator.jacket
-      case 4 => Validator.shirt = Validator.pjs; Validator.shirt
-      case 3 => Validator.socks = (this.isInstanceOf[Cold] && Validator.footWear == false && Validator.pjs); Validator.socks
-      case 2 => Validator.headWear = Validator.pjs;Validator.headWear
-      case 1 => Validator.footWear = Validator.pants; Validator.footWear
+      case 8 => validator.pjs = validator.socks == false && validator.footWear == false && validator.headWear == false &&
+        validator.pants == false && validator.jacket == false && validator.shirt == false; validator.pjs
+      case 7 => validator.pjs && validator.footWear && validator.shirt && validator.pants
+      case 6 => validator.pants = (validator.footWear == false && validator.pjs); validator.pants
+      case 5 => validator.jacket = this.isInstanceOf[Cold] && validator.shirt && validator.pjs; validator.jacket
+      case 4 => validator.shirt = validator.pjs; validator.shirt
+      case 3 => validator.socks = (this.isInstanceOf[Cold] && validator.footWear == false && validator.pjs); validator.socks
+      case 2 => validator.headWear = validator.pjs;validator.headWear
+      case 1 => validator.footWear = validator.pants; validator.footWear
     }
 
   }
@@ -39,19 +39,19 @@ object Command {
     6 -> CommandData(6,"Put on pants","shorts","pants"),
     7 -> CommandData(7,"Leave house","leaving house","leaving house"),
     8 -> CommandData(8,"Take off pajamas","Removing PJs","Removing PJs"))
-  def apply (command:Int, temperature:String):Command = {
+  def apply (command:Int, temperature:String, validator: Validator):Command = {
 
     commands.get(command) match{
 
       case Some(com) =>
-        accomodateTemperature(com,temperature)
+        accomodateTemperature(com,temperature,validator)
       case None => throw new RuntimeException(s"Invalid command code: $command")
     }
   }
-  def accomodateTemperature (c:CommandData, temperature:String):Command = {
+  def accomodateTemperature (c:CommandData, temperature:String, validator: Validator):Command = {
     temperature.toUpperCase match {
-      case "HOT" =>  new Command(c.code,c.description,c.hotResponse,c.coldResponse) with Hot
-      case "COLD" => new Command(c.code,c.description,c.hotResponse,c.coldResponse) with Cold
+      case "HOT" =>  new Command(c.code,c.description,c.hotResponse,c.coldResponse,validator) with Hot
+      case "COLD" => new Command(c.code,c.description,c.hotResponse,c.coldResponse,validator) with Cold
       case _ => throw new RuntimeException(s"Invalid temperature: $temperature")
     }
   }
