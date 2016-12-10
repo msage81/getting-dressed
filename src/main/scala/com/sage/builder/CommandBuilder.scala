@@ -18,7 +18,7 @@ class CommandBuilder {
       }
       responses += d
     }
-    if(responses(responses.size - 1).code != 7){
+    if(responses(responses.size - 1).code != Command.LEAVE_HOUSE){
       responses += new FailResponse
     }
     responses
