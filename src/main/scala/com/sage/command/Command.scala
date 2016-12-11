@@ -1,22 +1,24 @@
 package com.sage.command
 
-import com.sage.Validator
+import com.sage.DressStatus
 
 abstract class Command(val code:Int, val description:String, override val hotResponse:String,
-                       override val coldResponse:String, validator: Validator) extends Response{
+                       override val coldResponse:String, dressStatus: DressStatus) extends Response{
   import Command._
   def isValid(): Boolean ={
 
     code match {
-      case PAJAMAS_OFF => validator.pjs = validator.socks == false && validator.footWear == false && validator.headWear == false &&
-        validator.pants == false && validator.jacket == false && validator.shirt == false; validator.pjs
-      case LEAVE_HOUSE => validator.pjs && validator.footWear && validator.shirt && validator.pants
-      case PANTS => validator.pants = (validator.footWear == false && validator.pjs); validator.pants
-      case JACKET => validator.jacket = this.isInstanceOf[Cold] && validator.shirt && validator.pjs; validator.jacket
-      case SHIRT => validator.shirt = validator.pjs; validator.shirt
-      case SOCKS => validator.socks = (this.isInstanceOf[Cold] && validator.footWear == false && validator.pjs); validator.socks
-      case HEADWEAR => validator.headWear = validator.pjs;validator.headWear
-      case FOOTWEAR => validator.footWear = validator.pants; validator.footWear
+      case PAJAMAS_OFF => dressStatus.pjs = !dressStatus.socks  && !dressStatus.footWear  && !dressStatus.headWear  &&
+        !dressStatus.pants  && !dressStatus.jacket  && !dressStatus.shirt  && !dressStatus.pjs; dressStatus.pjs
+      case LEAVE_HOUSE => dressStatus.leaveHouse = dressStatus.pjs && dressStatus.footWear && dressStatus.shirt &&
+        dressStatus.pants && dressStatus.headWear && !dressStatus.leaveHouse &&
+        (if(this.isInstanceOf[Cold]) dressStatus.jacket else true); dressStatus.leaveHouse
+      case PANTS => dressStatus.pants = !dressStatus.footWear  && dressStatus.pjs && !dressStatus.pants; dressStatus.pants
+      case JACKET => dressStatus.jacket = this.isInstanceOf[Cold] && dressStatus.shirt && dressStatus.pjs && !dressStatus.jacket; dressStatus.jacket
+      case SHIRT => dressStatus.shirt = dressStatus.pjs && !dressStatus.shirt; dressStatus.shirt
+      case SOCKS => dressStatus.socks = (this.isInstanceOf[Cold] && !dressStatus.footWear && !dressStatus.socks && dressStatus.pjs); dressStatus.socks
+      case HEADWEAR => dressStatus.headWear = dressStatus.pjs && !dressStatus.headWear;dressStatus.headWear
+      case FOOTWEAR => dressStatus.footWear = dressStatus.pants && !dressStatus.footWear; dressStatus.footWear
     }
 
   }
@@ -48,7 +50,7 @@ object Command {
     PANTS -> CommandData(PANTS,"Put on pants","shorts","pants"),
     LEAVE_HOUSE -> CommandData(LEAVE_HOUSE,"Leave house","leaving house","leaving house"),
     PAJAMAS_OFF -> CommandData(PAJAMAS_OFF,"Take off pajamas","Removing PJs","Removing PJs"))
-  def apply (command:Int, temperature:String, validator: Validator):Command = {
+  def apply (command:Int, temperature:String, validator: DressStatus):Command = {
 
     commands.get(command) match{
 
@@ -57,7 +59,7 @@ object Command {
       case None => throw new RuntimeException(s"Invalid command code: $command")
     }
   }
-  def accomodateTemperature (c:CommandData, temperature:String, validator: Validator):Command = {
+  def accomodateTemperature (c:CommandData, temperature:String, validator: DressStatus):Command = {
     temperature.toUpperCase match {
       case "HOT" =>  new Command(c.code,c.description,c.hotResponse,c.coldResponse,validator) with Hot
       case "COLD" => new Command(c.code,c.description,c.hotResponse,c.coldResponse,validator) with Cold

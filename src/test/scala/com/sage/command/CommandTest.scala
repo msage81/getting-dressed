@@ -1,6 +1,6 @@
 package com.sage.command
 
-import com.sage.Validator
+import com.sage.DressStatus
 import org.scalatest.{FlatSpec, Matchers}
 import com.sage.command.Command._
 class CommandTest extends FlatSpec with Matchers{
@@ -26,7 +26,7 @@ class CommandTest extends FlatSpec with Matchers{
     assertCommand(PAJAMAS_OFF,"Take off pajamas","Removing PJs","Removing PJs","COLD",() =>"Removing PJs")
   }
   def assertCommand(code:Int, desc:String, hotResponse:String, coldResponse:String, temp:String, whichResponse:() => String): Unit ={
-    val comm = Command(code,temp, new Validator(false,false,false,false,false,false,false))
+    val comm = Command(code,temp, new DressStatus)
     comm.code should be(code)
     comm.description should be(desc)
     comm.hotResponse should be(hotResponse)

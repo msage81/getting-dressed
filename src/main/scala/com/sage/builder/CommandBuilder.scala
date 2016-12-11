@@ -1,6 +1,6 @@
 package com.sage.builder
 
-import com.sage.Validator
+import com.sage.DressStatus
 import com.sage.command.{Command, FailResponse, Response}
 
 import scala.collection.mutable.ListBuffer
@@ -34,11 +34,11 @@ class CommandBuilder {
   }
 
   def getDressed(temperature:String, commands:Int *):String ={
-    val validator = new Validator(false,false,false,false,false,false,false)
     if(!temperature.equalsIgnoreCase("HOT") && !temperature.equalsIgnoreCase("cold")){
       throw new DressingException
     }
-    val dressingSteps = commands.map(Command(_,temperature, validator))
+    val dressStatus = new DressStatus
+    val dressingSteps = commands.map(Command(_,temperature, dressStatus))
     buildReadableDressingSteps(dressingSteps)
   }
 
