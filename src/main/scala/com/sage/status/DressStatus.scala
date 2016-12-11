@@ -1,4 +1,4 @@
-package com.sage
+package com.sage.status
 
 class DressStatus(var pjs:Boolean = false,
                   var socks:Boolean= false,

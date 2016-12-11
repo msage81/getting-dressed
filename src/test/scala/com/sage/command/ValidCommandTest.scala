@@ -2,7 +2,7 @@ package com.sage.command
 
 import org.scalatest.{FlatSpec, Matchers}
 import Command._
-import com.sage.DressStatus
+import com.sage.status.DressStatus
 
 class ValidCommandTest extends FlatSpec with Matchers{
 

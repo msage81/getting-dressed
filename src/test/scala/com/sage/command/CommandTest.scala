@@ -1,8 +1,8 @@
 package com.sage.command
 
-import com.sage.DressStatus
 import org.scalatest.{FlatSpec, Matchers}
 import com.sage.command.Command._
+import com.sage.status.DressStatus
 class CommandTest extends FlatSpec with Matchers{
 
   "Accessing the apply method with the command code" should "return the appropriate command for a hot temperature" in {

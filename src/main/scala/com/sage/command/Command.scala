@@ -1,6 +1,6 @@
 package com.sage.command
 
-import com.sage.DressStatus
+import com.sage.status.DressStatus
 
 abstract class Command(val code:Int, val description:String, override val hotResponse:String,
                        override val coldResponse:String, dressStatus: DressStatus) extends Response{

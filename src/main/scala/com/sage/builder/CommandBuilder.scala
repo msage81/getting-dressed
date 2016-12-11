@@ -1,7 +1,7 @@
 package com.sage.builder
 
-import com.sage.DressStatus
 import com.sage.command.{Command, FailResponse, Response}
+import com.sage.status.DressStatus
 
 import scala.collection.mutable.ListBuffer
 import scala.util.{Failure, Success, Try}
